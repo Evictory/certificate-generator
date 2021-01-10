@@ -15,18 +15,13 @@ public class Image {
 
     public Image() {}
 
-    public Image(Long id, String description, String path) {
-        this.id = id;
+    public Image(String description, String path) {
         this.description = description;
         this.path = path;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getDescription() {

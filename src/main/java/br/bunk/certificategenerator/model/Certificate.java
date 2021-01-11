@@ -22,11 +22,12 @@ public class Certificate {
         }
     }
 
+    //i'm gonna abstract better these functions and other, still in process
     private static void transformHTMLPDF() throws IOException {
         File input = new File(HTML);
         org.jsoup.nodes.Document doc = Jsoup.parse(input, "UTF-8", HTML);
         Element div = doc.select("div#title").first();
-        div.html("<p>Alterado</p>");
+        div.html("<h1>Alterado</h1>");
 
         FileWriter writer = new FileWriter(HTML);
         writer.write(doc.toString());

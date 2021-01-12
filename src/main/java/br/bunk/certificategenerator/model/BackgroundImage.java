@@ -6,16 +6,16 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class Image {
+public class BackgroundImage {
 
     @Id @GeneratedValue
     private Long id;
     private String description;
     private String path;
 
-    public Image() {}
+    public BackgroundImage() {}
 
-    public Image(String description, String path) {
+    public BackgroundImage(String description, String path) {
         this.description = description;
         this.path = path;
     }
@@ -44,7 +44,7 @@ public class Image {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Image image = (Image) o;
+        BackgroundImage image = (BackgroundImage) o;
         return Objects.equals(id, image.id) && Objects.equals(description, image.description) && Objects.equals(path, image.path);
     }
 

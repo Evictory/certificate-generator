@@ -1,46 +1,71 @@
 package br.bunk.certificategenerator.model;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 
 public class Certificate {
-    private static final String HTML = "src/main/resources/templates/certificate.html";
 
-    //remove, only tests proposes
-    public static void main(String[] args) {
-        try {
-            transformHTMLPDF();
-            generateCertificatePDF(HTML);
-        } catch (IOException | ParserConfigurationException | DocumentException e) {
-            e.printStackTrace();
-        }
+    private long id;
+    private Course course;
+    private BackgroundImage backgroundImage;
+
+    public Certificate(Course course, BackgroundImage backgroundImage) {
+        this.course = course;
+        this.backgroundImage = backgroundImage;
     }
 
-    //i'm gonna abstract better these functions and other, still in process
-    private static void transformHTMLPDF() throws IOException {
-        File input = new File(HTML);
-        org.jsoup.nodes.Document doc = Jsoup.parse(input, "UTF-8", HTML);
-        Element div = doc.select("div#title").first();
-        div.html("<h1>Alterado</h1>");
-
-        FileWriter writer = new FileWriter(HTML);
-        writer.write(doc.toString());
-        writer.flush();
-        writer.close();
+    public long getId() {
+        return id;
     }
 
-    private static void generateCertificatePDF(String filename) throws ParserConfigurationException, IOException, DocumentException {
-        Document document = new Document();
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public void setBackgroundImage(BackgroundImage backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
+    public BackgroundImage getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    //
+//    //remove, only tests proposes
+//    public static void main(String[] args) {
+//        try {
+//            transformHTMLPDF();
+//            generateCertificatePDF(HTML);
+//        } catch (IOException | ParserConfigurationException | DocumentException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public static void generateCertificatePDF(Document document, String filename, Boolean newPage) throws IOException, DocumentException {
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("src/PDF/certificate.pdf"));
-        document.open();
-        XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(HTML));
-        document.close();
-    }
+        document.setPageSize(PageSize.A4.rotate());
 
+        if(newPage){
+            document.newPage();
+
+            return;
+        }
+
+        document.open();
+        XMLWorkerHelper.getInstance().parseXHtml(writer, document, new FileInputStream(filename));
+        document.close();
+
+        return;
+    }
 }

@@ -1,6 +1,7 @@
 package br.bunk.certificategenerator.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,16 +11,13 @@ public class Person {
     private long id;
     private String name;
     @OneToMany
-    private Set<PersonDocument> documents;
-    @ManyToMany
-    private Set<Course> course;
+    private Set<PersonDocument> documents = new HashSet<PersonDocument>();
 
     public Person() {}
 
-    public Person(String name, Set<PersonDocument> documents, Set<Course> course) {
+    public Person(String name, Set<PersonDocument> documents) {
         this.name = name;
         this.documents = documents;
-        this.course = course;
     }
 
     public long getId() {
@@ -42,21 +40,12 @@ public class Person {
         this.documents = documents;
     }
 
-    public Set<Course> getCourses() {
-        return course;
-    }
-
-    public void setCourses(Set<Course> courses) {
-        this.course = courses;
-    }
-
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", documents=" + documents +
-                ", courses=" + course +
                 '}';
     }
 }

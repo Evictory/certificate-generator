@@ -1,8 +1,7 @@
 package br.bunk.certificategenerator.model;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -12,12 +11,12 @@ public class Course {
     private String description;
     private int workload;
     @OneToMany
-    private Set<Person> people = new HashSet<Person>();
+    private List<Person> people;
 
     public Course() {
     }
 
-    public Course(String description, int workload, Set<Person> people) {
+    public Course(String description, int workload, List<Person> people) {
         this.description = description;
         this.workload = workload;
         this.people = people;
@@ -43,11 +42,11 @@ public class Course {
         this.workload = workload;
     }
 
-    public Set<Person> getPeople() {
+    public List<Person> getPeople() {
         return people;
     }
 
-    public void setPeople(Set<Person> people) {
+    public void setPeople(List<Person> people) {
         this.people = people;
     }
 

@@ -9,5 +9,4 @@ class CertificategeneratorApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

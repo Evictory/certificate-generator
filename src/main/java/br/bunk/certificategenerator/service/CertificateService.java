@@ -11,39 +11,43 @@ import org.jsoup.nodes.Element;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.List;
 
 public class CertificateService {
     private static final String HTML = "src/main/resources/templates/certificate.html";
     private com.itextpdf.text.Document finalDocument = new com.itextpdf.text.Document();
 
-
-    private void transformHTML(Certificate certificate) throws IOException, DocumentException {
+    public void transformHTML(Certificate certificate) throws IOException, DocumentException {
         File input = new File(HTML);
         Document doc = Jsoup.parse(input, "UTF-8", HTML);
-        String newFile = HTML.replace("certificate", "certificate-" + certificate.getId());
+        String pathNewFile = HTML.replace("certificate", "certificate-" + certificate.getId());
 
         Course course = certificate.getCourse();
-        Set<Person> people = course.getPeople();
+        List<Person> people = course.getPeople();
 
-        for (int i = 0; i < people.size(); i++){
+        Element about = doc.select(".certificate_about").first();
+        about.text(certificate.getAbout());
 
-            Element about = doc.select(".certificate_about").first();
-            about.text("de participação");
+        Element courseName = doc.select(".course").first();
+        courseName.text(course.getDescription());
+
+        for (Iterator<Person> it = people.iterator(); it.hasNext(); ) {
+            Person person = it.next();
 
             Element name = doc.select(".certified_name").first();
-            name.text("EMERSON NOVO");
+            name.text(person.getName());
 
-            FileWriter writer = new FileWriter(newFile);
+            FileWriter writer = new FileWriter(pathNewFile);
             writer.write(doc.toString());
             writer.flush();
             writer.close();
 
-            Certificate.generateCertificatePDF(finalDocument, newFile, true);
+            certificate.generateCertificatePDF(finalDocument, pathNewFile, true);
 
         }
 
-        Certificate.generateCertificatePDF(finalDocument, newFile, false);
+        certificate.generateCertificatePDF(finalDocument, pathNewFile, false);
     }
 
 
